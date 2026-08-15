@@ -2,6 +2,15 @@ import { useState, useEffect } from "react";
 import { getJornadas, getJornada } from "./api";
 import Quiz from "./components/Quiz";
 
+// convierto '2026-02-26' en '26 feb 2026' para mostrarlo mas humano.
+const _MESES = ["ene", "feb", "mar", "abr", "may", "jun",
+  "jul", "ago", "sep", "oct", "nov", "dic"];
+function fechaBonita(iso) {
+  const p = String(iso).split("-");
+  if (p.length !== 3) return iso;
+  return `${Number(p[2])} ${_MESES[Number(p[1]) - 1]} ${p[0]}`;
+}
+
 // renderizo un bloque de texto (con saltos dobles) como parrafos.
 function Parrafos({ texto }) {
   if (!texto) return null;
@@ -76,8 +85,10 @@ export default function App() {
   useEffect(() => {
     getJornadas()
       .then((js) => {
-        setJornadas(js);
-        if (js.length) setFecha(js[0]);
+        // ordeno por fecha descendente: la mas reciente es siempre la portada.
+        const orden = [...js].sort((a, b) => b.localeCompare(a));
+        setJornadas(orden);
+        if (orden.length) setFecha(orden[0]);
       })
       .catch((e) => setError(e.message));
   }, []);
@@ -104,7 +115,7 @@ export default function App() {
             <select value={fecha ?? ""} onChange={(e) => setFecha(e.target.value)}>
               {jornadas.map((j) => (
                 <option key={j} value={j}>
-                  {j}
+                  {fechaBonita(j)}
                 </option>
               ))}
             </select>
@@ -133,7 +144,7 @@ export default function App() {
         {data && !cargando && (
           <>
             <div className="titulo-jornada">
-              <h1>Jornada del {data.fecha}</h1>
+              <h1>Jornada del {fechaBonita(data.fecha)}</h1>
               <span className={`chip ${spoilers ? "chip-spoil" : "chip-safe"}`}>
                 {spoilers ? "Con resultados" : "Sin spoilers"}
               </span>

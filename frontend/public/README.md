@@ -1,7 +1,7 @@
 ---
 title: MVP Analista NBA
 emoji: 🏀
-colorFrom: orange
+colorFrom: red
 colorTo: gray
 sdk: static
 pinned: false
