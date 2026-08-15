@@ -1,0 +1,22 @@
+# Secretos (la clave se inyecta como variable de entorno / secret del Space)
+.env
+
+# Dependencias y builds locales (se reconstruyen en la imagen)
+frontend/node_modules
+frontend/dist
+.venv
+venv
+**/__pycache__
+*.pyc
+
+# Caches de datos grandes: se regeneran en runtime. Se CONSERVA contenido_*.json
+# (el producto que sirve el backend) para que la app arranque con demo.
+datos/jornada_*.json
+datos/carrera_*.json
+datos/paquete_*.json
+datos/*.db
+
+# Varios
+.git
+.gitignore
+README.md

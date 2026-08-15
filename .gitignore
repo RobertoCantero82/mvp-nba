@@ -1,0 +1,18 @@
+# Secretos
+.env
+
+# Cache de datos (se regeneran con el pipeline)
+datos/jornada_*.json
+datos/carrera_*.json
+datos/paquete_*.json
+datos/*.db
+
+# El contenido redactado SÍ se versiona: es el producto que sirve el backend y
+# permite que la app (y el despliegue en HF Spaces) arranque con una demo lista.
+!datos/contenido_*.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

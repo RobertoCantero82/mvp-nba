@@ -1,0 +1,16 @@
+# Capa de datos
+nba_api>=1.11.0
+
+# LLM (capa de razonamiento/redaccion)
+groq>=0.11.0
+
+# Backend de solo lectura
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+
+# Scheduler nocturno (dentro del contenedor)
+APScheduler>=3.10.0
+
+# Utilidades
+python-dotenv>=1.0.0
+requests>=2.31.0
