@@ -20,6 +20,16 @@ function Parrafos({ texto }) {
     .map((p, i) => <p key={i}>{p.trim()}</p>);
 }
 
+// color principal de cada franquicia, para dar aire de retransmision al marcador.
+const COLOR_EQUIPO = {
+  ATL: "#E03A3E", BOS: "#1FA67A", BKN: "#B0B4BC", CHA: "#00788C", CHI: "#CE1141",
+  CLE: "#C8102E", DAL: "#0053BC", DEN: "#FEC524", DET: "#EF3B50", GSW: "#1D69C4",
+  HOU: "#CE1141", IND: "#FDBB30", LAC: "#EF3B50", LAL: "#B98CE8", MEM: "#5D76A9",
+  MIA: "#F9155E", MIL: "#2ECC8B", MIN: "#4FA3E0", NOP: "#C8A96A", NYK: "#F58426",
+  OKC: "#00A2E8", ORL: "#0B77C0", PHI: "#3C7DD6", PHX: "#E56020", POR: "#EF3B50",
+  SAC: "#8E6CC0", SAS: "#C4CED4", TOR: "#E03A46", UTA: "#F9A01B", WAS: "#3C6DF0",
+};
+
 function Resultados({ partidos }) {
   if (!partidos?.length) return null;
   return (
@@ -29,15 +39,30 @@ function Resultados({ partidos }) {
         {partidos.map((p) => {
           const ganaVis = p.ganador === p.visitante;
           const ganaLoc = p.ganador === p.local;
+          const colorGanador = COLOR_EQUIPO[p.ganador] || "var(--acento)";
           return (
-            <div className="marcador" key={p.game_id}>
+            <div
+              className="marcador"
+              key={p.game_id}
+              style={{ borderLeftColor: colorGanador }}
+            >
               <div className={`equipo ${ganaVis ? "gana" : ""}`}>
                 <span className="abbr">{p.visitante}</span>
-                <span className="pts">{p.pts_visitante}</span>
+                <span
+                  className="pts"
+                  style={ganaVis ? { color: colorGanador, textShadow: `0 0 14px ${colorGanador}88` } : undefined}
+                >
+                  {p.pts_visitante}
+                </span>
               </div>
               <div className={`equipo ${ganaLoc ? "gana" : ""}`}>
                 <span className="abbr">{p.local}</span>
-                <span className="pts">{p.pts_local}</span>
+                <span
+                  className="pts"
+                  style={ganaLoc ? { color: colorGanador, textShadow: `0 0 14px ${colorGanador}88` } : undefined}
+                >
+                  {p.pts_local}
+                </span>
               </div>
             </div>
           );
