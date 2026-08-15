@@ -1,0 +1,208 @@
+{
+  "fecha": "2026-02-26",
+  "quiz": {
+    "intro": "Creerse experto en la NBA por los titulares es como creerse arquitecto viendo solo las fachadas. Te sirvo cuatro claves que no brillan en las pizarras, pero que sostienen el verdadero ritmo de esta jornada. ¿Atraviesas la defensa sin solicitar ni un solo tiempo muerto de cortesía?",
+    "preguntas": [
+      {
+        "pregunta": "¿Que jugador logro superar los 32.000 puntos de carrera en esta jornada?",
+        "opciones": [
+          "K. Durant",
+          "B. Miller",
+          "K. Knueppel",
+          "A. Nembhard"
+        ],
+        "correcta": "K. Durant",
+        "correcta_idx": 0,
+        "explicacion": "K. Durant (HOU) supera los 32.000 puntos de carrera"
+      },
+      {
+        "pregunta": "¿Que jugador logro superar los 1.000 triples de carrera en esta jornada?",
+        "opciones": [
+          "L. Ball",
+          "M. Porter Jr.",
+          "M. Potter",
+          "B. Adebayo"
+        ],
+        "correcta": "M. Porter Jr.",
+        "correcta_idx": 1,
+        "explicacion": "M. Porter Jr. (BKN) supera los 1.000 triples de carrera"
+      },
+      {
+        "pregunta": "¿Que jugador logro anotar 42 puntos en un partido en esta jornada?",
+        "opciones": [
+          "T. Maxey",
+          "J. Embiid",
+          "S. Bey",
+          "T. Herro"
+        ],
+        "correcta": "S. Bey",
+        "correcta_idx": 2,
+        "explicacion": "S. Bey (NOP) anota 42 puntos (14/20 TC, 5/9 T3, 9/9 TL)"
+      },
+      {
+        "pregunta": "¿Que jugador logro anotar 41 puntos en un partido en esta jornada?",
+        "opciones": [
+          "K. Oubre Jr.",
+          "V. Edgecombe",
+          "J. Jaquez Jr.",
+          "L. Dončić"
+        ],
+        "correcta": "L. Dončić",
+        "correcta_idx": 3,
+        "explicacion": "L. Dončić (LAL) anota 41 puntos (12/21 TC, 6/11 T3, 11/12 TL)"
+      }
+    ]
+  },
+  "analisis": {
+    "con_resultados": "Hay números que no se gritan en las gradas, se cargan sobre los hombros con el peso de las décadas, y esta noche Kevin Durant (HOU) cruzó otro de esos umbrales silenciosos: supera los 32.000 puntos de carrera. No fue un estallido improvisado, sino la consecuencia lógica de una biblioteca ofensiva que se escribe a razón de 40 puntos por encuentro (14/28 TC, 2/10 T3, 10/10 TL). Mientras la cancha celebraba el hito, lo verdaderamente revelador estaba en la línea de tiros libres: la perfección desde el cerco se convirtió en el denominador común de la élite anotadora de la jornada.\n\nEl rey del día fue S. Bey (NOP), quien se llevó el máximo anotador con 42 puntos, pero lo que merece un análisis profundo es su quimera estadística: 87,6% de tiro real (TS%) para una carga de ese calibre. Fue un ejercicio de economía ofensiva (14/20 TC, 5/9 T3, 9/9 TL) que dejó atrás cualquier esquema defensivo con el reglamento en la mano. A su lado, L. Dončić (LAL) respondió con 41 puntos (12/21 TC, 6/11 T3, 11/12 TL), demostrando que cuando la lógica dicta que hay que administrar el ataque, él simplemente reescribe la matemática. En una jornada que dejó diez duelos sobre el parquet, la línea de tiros libres pareció haber firmado un pacto de silencio con los rebotes.\n\nSi la potencia tiene su tribuna, la precisión tiene su santuario. J. Champagnie (SAS) firmó 26 puntos con un 92,9% de tiro real, una puntería de élite que convierte la posesión en un acto quirúrgico. Y mientras los máximos figuras celebran sus récords, M. Porter Jr. (BKN) cruzó la barrera de los 1.000 triples de carrera, un club que hoy se llena con la misma constancia que antes se reservaba para los pívots. La NBA ya no mide el valor solo en sudor, sino en porcentajes que rozan la física imposible. Esta noche, la baloncestística moderna hizo las matemáticas bien.",
+    "sin_spoilers": "Hay cifras que no se gritan en las gradas, se cargan sobre los hombros con el peso de los años, y esta noche un veterano de la liga cruzó otro de esos umbrales silenciosos: una marca histórica de anotación acumulada que solo un puñado de figuras han contemplado. No fue un estallido improvisado, sino la consecuencia natural de una trayectoria que, precisamente en este encuentro, se tradujo en una noche de alto volumen anotador. Mientras la cancha celebraba el hito, lo verdaderamente revelador estaba en la línea de tiros libres: la perfección desde el cerco se convirtió en el denominador común de la élite ofensiva del día.\n\nEl protagonista de la jornada se llevó el máximo anotador con una exhibición de magnitud excepcional, pero lo que merece un análisis profundo es su quimera estadística: una eficiencia que roza lo insultante para cualquier esquema defensivo. Fue un ejercicio de economía ofensiva, con una puntería que dejó atrás el reglamento tradicional. A su lado, un director de juego respondió con una carga anotadora igualmente contundente, demostrando que cuando la lógica dicta administrar el ataque, él simplemente reescribe la matemática del partido. En una jornada repleta de enfrentamientos, la línea de tiros libres pareció haber firmado un pacto de silencio con los rebotes.\n\nSi la potencia tiene su tribuna, la precisión tiene su santuario. Un jugador de menor protagonismo habitual firmó una actuación de precisión quirúrgica, con un porcentaje de tiro real que convierte cada posesión en un acto de anatomía perfecta. Y mientras las máximas figuras celebran sus récords, un tirador especializado cruzó un umbral histórico de lanzamientos desde la línea de tres, un club que hoy se llena con la misma constancia que antes se reservaba para los pívots. La liga ya no mide el valor solo en sudor, sino en porcentajes que desafían la física convencional. Esta noche, la baloncestística moderna hizo las matemáticas bien."
+  },
+  "contrafactual": {
+    "jugador": "C. Kispert",
+    "equipo": "ATL",
+    "pts_noche": 33,
+    "media": 9.2,
+    "sigma": 6.3,
+    "z": 3.8,
+    "rango_esperado": [
+      3,
+      15
+    ],
+    "game_id": "0022500850",
+    "texto": "Si Kispert se hubiera limitado a cumplir con su media de 9.2 puntos y haberse quedado dentro del rango de 3 a 15 que la hoja de ruta marcaba, esta noche no habléramos de un terremoto ofensivo, sino de un ejercicio de geometría aplicada a los rotativos. Esa desviación de 3.8 desviaciones típicas no es solo un número bonito; es la distancia entre un jugador que pide balón en la esquina y un desequilibrio táctico que obliga a los defensores a reescribir"
+  },
+  "quiz_respuestas": [
+    {
+      "pregunta": "¿Que jugador logro superar los 32.000 puntos de carrera en esta jornada?",
+      "correcta": "K. Durant",
+      "explicacion": "K. Durant (HOU) supera los 32.000 puntos de carrera"
+    },
+    {
+      "pregunta": "¿Que jugador logro superar los 1.000 triples de carrera en esta jornada?",
+      "correcta": "M. Porter Jr.",
+      "explicacion": "M. Porter Jr. (BKN) supera los 1.000 triples de carrera"
+    },
+    {
+      "pregunta": "¿Que jugador logro anotar 42 puntos en un partido en esta jornada?",
+      "correcta": "S. Bey",
+      "explicacion": "S. Bey (NOP) anota 42 puntos (14/20 TC, 5/9 T3, 9/9 TL)"
+    },
+    {
+      "pregunta": "¿Que jugador logro anotar 41 puntos en un partido en esta jornada?",
+      "correcta": "L. Dončić",
+      "explicacion": "L. Dončić (LAL) anota 41 puntos (12/21 TC, 6/11 T3, 11/12 TL)"
+    }
+  ],
+  "resultados": [
+    {
+      "game_id": "0022500848",
+      "visitante": "CHA",
+      "visitante_nombre": "Charlotte Hornets",
+      "pts_visitante": 133,
+      "local": "IND",
+      "local_nombre": "Indiana Pacers",
+      "pts_local": 109,
+      "ganador": "CHA",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500849",
+      "visitante": "MIA",
+      "visitante_nombre": "Miami Heat",
+      "pts_visitante": 117,
+      "local": "PHI",
+      "local_nombre": "Philadelphia 76ers",
+      "pts_local": 124,
+      "ganador": "PHI",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500850",
+      "visitante": "WAS",
+      "visitante_nombre": "Washington Wizards",
+      "pts_visitante": 96,
+      "local": "ATL",
+      "local_nombre": "Atlanta Hawks",
+      "pts_local": 126,
+      "ganador": "ATL",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500851",
+      "visitante": "SAS",
+      "visitante_nombre": "San Antonio Spurs",
+      "pts_visitante": 126,
+      "local": "BKN",
+      "local_nombre": "Brooklyn Nets",
+      "pts_local": 110,
+      "ganador": "SAS",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500852",
+      "visitante": "HOU",
+      "visitante_nombre": "Houston Rockets",
+      "pts_visitante": 113,
+      "local": "ORL",
+      "local_nombre": "Orlando Magic",
+      "pts_local": 108,
+      "ganador": "HOU",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500853",
+      "visitante": "POR",
+      "visitante_nombre": "Portland Trail Blazers",
+      "pts_visitante": 121,
+      "local": "CHI",
+      "local_nombre": "Chicago Bulls",
+      "pts_local": 112,
+      "ganador": "POR",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500854",
+      "visitante": "SAC",
+      "visitante_nombre": "Sacramento Kings",
+      "pts_visitante": 130,
+      "local": "DAL",
+      "local_nombre": "Dallas Mavericks",
+      "pts_local": 121,
+      "ganador": "SAC",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500855",
+      "visitante": "LAL",
+      "visitante_nombre": "Los Angeles Lakers",
+      "pts_visitante": 110,
+      "local": "PHX",
+      "local_nombre": "Phoenix Suns",
+      "pts_local": 113,
+      "ganador": "PHX",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500856",
+      "visitante": "NOP",
+      "visitante_nombre": "New Orleans Pelicans",
+      "pts_visitante": 129,
+      "local": "UTA",
+      "local_nombre": "Utah Jazz",
+      "pts_local": 118,
+      "ganador": "NOP",
+      "estado": "Final"
+    },
+    {
+      "game_id": "0022500857",
+      "visitante": "MIN",
+      "visitante_nombre": "Minnesota Timberwolves",
+      "pts_visitante": 94,
+      "local": "LAC",
+      "local_nombre": "LA Clippers",
+      "pts_local": 88,
+      "ganador": "MIN",
+      "estado": "Final"
+    }
+  ]
+}

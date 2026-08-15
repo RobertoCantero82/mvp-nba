@@ -1,17 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// el backend FastAPI corre por defecto en http://localhost:8000 y expone la API
-// bajo el prefijo /api. proxyeo /api -> backend conservando el prefijo (mismo
-// esquema que en produccion, donde FastAPI sirve /api y el frontend estatico).
+// base './' hace que las rutas de assets sean relativas: asi la web funciona tanto
+// en la raiz de un Space de Hugging Face como bajo cualquier subcarpeta.
+// no necesito proxy: la web lee el contenido de archivos JSON estaticos (data/).
 export default defineConfig({
+  base: "./",
   plugins: [react()],
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-      },
-    },
-  },
 });

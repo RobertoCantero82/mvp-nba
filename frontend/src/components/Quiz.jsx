@@ -63,7 +63,7 @@ export default function Quiz({ fecha, quiz }) {
                 key={j}
                 className={claseOpcion(i, j)}
                 disabled={enviado}
-                onClick={() => setSeleccion({ ...seleccion, [i]: j })}
+                onClick={() => setSeleccion((prev) => ({ ...prev, [i]: j }))}
               >
                 <span className="letra">{String.fromCharCode(65 + j)}</span>
                 {op}

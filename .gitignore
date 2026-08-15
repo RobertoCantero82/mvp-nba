@@ -16,3 +16,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# carpeta de despliegue estatico (se regenera desde frontend/dist)
+web_estatica/

@@ -1,19 +1,58 @@
-// cliente de la API de solo lectura de M.V.P.
-// en desarrollo, Vite proxya /api -> http://localhost:8000 (ver vite.config.js).
-// en produccion lo puedo sobreescribir con VITE_API_URL.
-const BASE = import.meta.env.VITE_API_URL || "/api";
+// cliente ESTATICO: leo el contenido ya generado desde archivos JSON incluidos en
+// la propia web (carpeta data/), sin backend. la logica de spoilers y del quiz
+// corre en el navegador, asi la web es 100% estatica y se despliega gratis.
+// (el backend FastAPI sigue existiendo para uso local; aqui no hace falta.)
+const BASE = import.meta.env.BASE_URL || "/";
 
-async function _get(ruta) {
-  const resp = await fetch(`${BASE}${ruta}`);
-  if (!resp.ok) {
-    throw new Error(`Error ${resp.status} al pedir ${ruta}`);
-  }
+async function _cargarContenido(fecha) {
+  const resp = await fetch(`${BASE}data/contenido_${fecha}.json`);
+  if (!resp.ok) throw new Error(`no encuentro el contenido de la jornada ${fecha}`);
   return resp.json();
 }
 
-export const getJornadas = () => _get("/jornadas");
+// listado de jornadas disponibles (lo genero al construir la web).
+export async function getJornadas() {
+  const resp = await fetch(`${BASE}data/manifest.json`);
+  if (!resp.ok) throw new Error("no encuentro el listado de jornadas");
+  return resp.json();
+}
 
-export const getJornada = (fecha, spoilers) =>
-  _get(`/jornada/${fecha}?spoilers=${spoilers ? "true" : "false"}`);
+// replico el moldeado que hacia el backend: version con-resultados / sin-spoilers.
+function _moldear(c, spoilers) {
+  return {
+    fecha: c.fecha,
+    modo: spoilers ? "con_resultados" : "sin_spoilers",
+    quiz: {
+      intro: c.quiz?.intro ?? "",
+      // no expongo la respuesta correcta en las opciones (se pide aparte al comprobar).
+      preguntas: (c.quiz?.preguntas ?? []).map((p) => ({
+        pregunta: p.pregunta,
+        opciones: p.opciones,
+      })),
+    },
+    // los marcadores son spoilers: solo en la version con-resultados.
+    resultados: spoilers ? c.resultados ?? null : null,
+    analisis: spoilers
+      ? c.analisis?.con_resultados ?? ""
+      : c.analisis?.sin_spoilers ?? "",
+    contrafactual: spoilers ? c.contrafactual ?? null : null,
+  };
+}
 
-export const getRespuestas = (fecha) => _get(`/jornada/${fecha}/respuestas`);
+export async function getJornada(fecha, spoilers) {
+  return _moldear(await _cargarContenido(fecha), spoilers);
+}
+
+// respuestas del quiz (revelado opt-in: solo las leo al comprobar).
+export async function getRespuestas(fecha) {
+  const c = await _cargarContenido(fecha);
+  return {
+    fecha,
+    respuestas: (c.quiz?.preguntas ?? []).map((p) => ({
+      pregunta: p.pregunta,
+      correcta: p.correcta,
+      correcta_idx: p.correcta_idx,
+      explicacion: p.explicacion,
+    })),
+  };
+}
