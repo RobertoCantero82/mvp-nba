@@ -11,6 +11,11 @@ uvicorn[standard]>=0.30.0
 # Scheduler nocturno (dentro del contenedor)
 APScheduler>=3.10.0
 
+# Modelo de ML para predecir partidos (capa de datos)
+scikit-learn>=1.4.0
+pandas>=2.0.0
+joblib>=1.3.0
+
 # Utilidades
 python-dotenv>=1.0.0
 requests>=2.31.0
