@@ -47,7 +47,7 @@ export default function App() {
       <div className="orb a" /><div className="orb b" /><div className="orb c" />
 
       <header className="nav"><div className="wrap">
-        <div className="brand">MVP<span>Analista NBA{fecha ? ` · ${fechaBonita(fecha)}` : ""}</span></div>
+        <div className="brand">Agente M.V.P.{fecha ? <span>{fechaBonita(fecha)}</span> : null}</div>
         <div className="controls">
           {jornadas.length > 1 && (
             <select value={fecha ?? ""} onChange={(e) => setFecha(e.target.value)}>
@@ -86,7 +86,9 @@ export default function App() {
       )}
 
       <footer>
-        Datos vía nba_api · redacción asistida por IA con cifras verificadas · cero apuestas
+        Agente M.V.P. — Métricas · Verificación · Publicación&nbsp;&nbsp;|&nbsp;&nbsp;
+        redacción asistida a través de LLM y datos verificados&nbsp;&nbsp;|&nbsp;&nbsp;
+        Roberto Cantero
       </footer>
     </div>
   );
