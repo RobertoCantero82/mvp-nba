@@ -41,7 +41,7 @@ body::before {
 
 /* nav translúcida + control segmentado */
 .nav { position: sticky; top: 0; z-index: 40; background: rgba(238,240,245,.7); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--hair); }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; gap: 12px; }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 66px; gap: 12px; }
 .brand { font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em; white-space: nowrap; }
 .brand span { color: var(--muted); font-weight: 500; margin-left: 8px; font-size: .82rem; }
 .controls { display: flex; align-items: center; gap: 10px; }
