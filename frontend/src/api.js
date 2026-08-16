@@ -19,15 +19,18 @@ export async function getJornadas() {
 
 // replico el moldeado que hacia el backend: version con-resultados / sin-spoilers.
 function _moldear(c, spoilers) {
+  const p = c.portada;
   return {
     fecha: c.fecha,
     modo: spoilers ? "con_resultados" : "sin_spoilers",
+    // portada: completa con resultados; sin spoilers solo el tipo (sin nombre ni cifra).
+    portada: p ? (spoilers ? p : { tipo: p.tipo, unidad: p.unidad, safe: true }) : null,
     quiz: {
       intro: c.quiz?.intro ?? "",
       // no expongo la respuesta correcta en las opciones (se pide aparte al comprobar).
-      preguntas: (c.quiz?.preguntas ?? []).map((p) => ({
-        pregunta: p.pregunta,
-        opciones: p.opciones,
+      preguntas: (c.quiz?.preguntas ?? []).map((q) => ({
+        pregunta: q.pregunta,
+        opciones: q.opciones,
       })),
     },
     // los marcadores son spoilers: solo en la version con-resultados.

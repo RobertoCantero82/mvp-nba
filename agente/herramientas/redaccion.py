@@ -53,6 +53,40 @@ def _contexto_historias(historias: list[Evento], n: int = 8) -> str:
     return "\n".join(f"- [{e.tipo}] {e.titular}" for e in historias[:n])
 
 
+# unidad legible para el numero grande de la portada segun el tipo de hito.
+_PORTADA_UNIDAD = {
+    "hito_pts_carrera": "puntos de carrera",
+    "hito_fg3m_carrera": "triples de carrera",
+    "hito_ast_carrera": "asistencias de carrera",
+    "hito_reb_carrera": "rebotes de carrera",
+    "anotacion_alta": "puntos",
+    "festival_triples": "triples",
+}
+
+
+def portada_desde_evento(evento: Evento) -> dict:
+    """Extraigo de la historia principal los datos para el 'hero' de portada:
+    el numero grande, su unidad y el contexto. Datos puros; el LLM no interviene."""
+    d = evento.datos
+    numero, unidad, contexto = "", _PORTADA_UNIDAD.get(evento.tipo, ""), ""
+    if "umbral" in d:  # hitos de carrera (puntos, triples, ...)
+        numero = f"{d['umbral']:,}".replace(",", ".")
+        if d.get("rank_historico_aprox"):
+            contexto = f"Nº {d['rank_historico_aprox']} de la historia"
+    elif evento.tipo == "anotacion_alta":
+        numero = str(d.get("pts", ""))
+    elif evento.tipo == "festival_triples":
+        numero = str(d.get("fg3m", ""))
+    elif evento.tipo.startswith("racha_"):
+        numero = str(d.get("longitud", ""))
+        unidad = "partidos seguidos"
+    return {
+        "tipo": evento.tipo, "jugador": evento.jugador, "equipo": evento.equipo_abbr,
+        "numero": numero, "unidad": unidad, "contexto": contexto,
+        "titular": evento.titular,
+    }
+
+
 def resultados_jornada(paquete: PaqueteJornada) -> list[dict]:
     """Marcadores de todos los partidos (datos puros, sin LLM). Son 'con resultados'
     por naturaleza: un marcador es un spoiler, asi que el backend solo los sirve en
@@ -303,6 +337,9 @@ def redactar(historias: list[Evento], paquete: PaqueteJornada,
 
     # incluyo los marcadores de la jornada (datos puros; el backend los sirve solo con-resultados).
     contenido["resultados"] = resultados_jornada(paquete)
+
+    # portada: la historia principal (la primera priorizada) para el hero.
+    contenido["portada"] = portada_desde_evento(historias[0]) if historias else None
 
     def _pausa():
         if pausas:

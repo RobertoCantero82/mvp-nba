@@ -204,5 +204,14 @@
       "ganador": "MIN",
       "estado": "Final"
     }
-  ]
+  ],
+  "portada": {
+    "tipo": "hito_pts_carrera",
+    "jugador": "K. Durant",
+    "equipo": "HOU",
+    "numero": "32.000",
+    "unidad": "puntos de carrera",
+    "contexto": "Nº 6 de la historia",
+    "titular": "K. Durant (HOU) supera los 32.000 puntos de carrera"
+  }
 }
