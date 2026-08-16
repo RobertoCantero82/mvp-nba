@@ -24,7 +24,8 @@ export default function Quiz({ quiz }) {
             </button>
           ))}
         </div>
-        {done && quiz.explicacion && <p className="reveal">💡 {quiz.explicacion}</p>}
+        {/* al contestar, revelo la explicación (sin iconos) */}
+        {done && quiz.explicacion && <p className="reveal">{quiz.explicacion}</p>}
       </div>
     </div></section>
   );

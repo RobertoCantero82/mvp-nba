@@ -189,5 +189,18 @@
     ],
     "game_id": "0022500836",
     "texto": "Esta noche, M. Buzelis (CHI) anotó 32 puntos, una salida de ruta que se sitúa a 2,31 desviaciones típicas de su media de 16,3. Pero, ¿qué hubiera pasado si se hubiera quedado dentro del rango esperable de 9 a 23 puntos? La lectura del partido habría mutado de un fenómeno estadístico a un ejercicio de rotaciones y posesión gestionada. En lugar de analizar cómo un jugador se escapa de los márgenes, los"
+  },
+  "prediccion": {
+    "local": "DEN",
+    "visitante": "BOS",
+    "favorito": "BOS",
+    "prob_favorito": 51,
+    "prob_local": 49,
+    "margen_esperado": 0,
+    "local_nombre": "Denver Nuggets",
+    "visitante_nombre": "Boston Celtics",
+    "favorito_nombre": "Boston Celtics",
+    "fecha": "2026-02-25",
+    "texto": "Mañana, los Celtics viajarán a la pista de los Nuggets con un 51% de probabilidad sobre un margen de ~0 puntos, un escenario que convierte a este duelo de estrellas en un tablero donde la altitud y la precisión se disputan cada posesión mientras la matemática se niega a dar un ganador claro."
   }
 }

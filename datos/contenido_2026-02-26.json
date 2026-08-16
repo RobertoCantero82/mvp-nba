@@ -177,5 +177,18 @@
     ],
     "game_id": "0022500850",
     "texto": "Si C. Kispert (ATL) hubiera cumplido con su horario habitual, esta tarde se habría cerrado entre los 3 y los 15 puntos que las matemáticas le asignaban por cortesía. En ese guion alternativo, sus 9,2 puntos de media no serían más que una anotación de fondo, un dato que se esfuma en la pizarra sin alterar el ritmo. La lectura del encuentro, en lugar de girar en torno a un desenlace que se desvió 3,8 desviaciones típicas de su media —ese tipo de cifra que obliga a los analistas a revisar tres veces sus hojas de cálculo—, habría sido otro partido cualquiera: titulares haciendo su trabajo y un rol que, por definición, no exige papeles de protagonista.\n\nPero las curvas de probabilidad tienen días de rebeldía, y cuando el marcador se inclina hacia los 33 puntos, la ecuación se rompe. Ese salto no solo reescribe la historia de la noche, sino que transforma a un jugador cuya contribución se esperaba dentro de un rango de 3 a 15 en el eje central del relato. Sin esos 33 puntos, el análisis habría buscado explicaciones en otros lados; con ellos, la narrativa se desploma sobre un fenómeno que, estadísticamente, debería ser casi un milagro. Y es que, en la NBA, lo más difícil no es encestar, sino convencer a la desviación estándar de que, por una vez, deje de ser tan predecible."
+  },
+  "prediccion": {
+    "local": "DAL",
+    "visitante": "MEM",
+    "favorito": "DAL",
+    "prob_favorito": 53,
+    "prob_local": 53,
+    "margen_esperado": 1,
+    "local_nombre": "Dallas Mavericks",
+    "visitante_nombre": "Memphis Grizzlies",
+    "favorito_nombre": "Dallas Mavericks",
+    "fecha": "2026-02-27",
+    "texto": "Cuando la contundencia de Memphis irrumpla en la casa de Dallas para medirse con la creatividad de sus estrellas locales, el duelo se jugará en un margen estadístico más estrecho que la pintura: nuestro modelo sitúa a los anfitriones con un 53 % de probabilidad, una ventaja de ~1 punto que confirma que, en un choque donde cada posesión define el rumbo, la distancia entre el himno y el replanteo suele medirse en centímetros."
   }
 }

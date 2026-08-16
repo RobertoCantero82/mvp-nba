@@ -78,6 +78,7 @@ export default function App() {
             <SinSpoilers
               highlights={data.highlights}
               recomendacion={data.recomendacion}
+              prediccion={data.prediccion}
               gate={data.gate}
               onUnlock={() => setSpoilers(true)}
             />

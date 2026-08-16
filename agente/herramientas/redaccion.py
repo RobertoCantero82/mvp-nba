@@ -425,6 +425,88 @@ def recomendacion_partido(paquete: PaqueteJornada) -> Optional[dict]:
 
 
 # ---------------------------------------------------------------------------
+# predicción de mañana (modelo de ML; el LLM solo narra la cifra)
+# ---------------------------------------------------------------------------
+
+def redactar_prediccion(p: dict) -> str:
+    """El LLM escribe una previa breve alrededor de las cifras del modelo. Sin apuestas."""
+    system = VOZ_EDITORIAL + "\n" + GUARDARRAILES + _BREVE + (
+        "\nEsto es un PRONÓSTICO ANALÍTICO, jamás un consejo de apuesta: nada de "
+        "cuotas ni de 'apuesta por'.")
+    user = (
+        "Escribe 1-2 frases de previa para este partido de MAÑANA, con SOLO estas cifras "
+        "ya calculadas por nuestro modelo (no inventes ni cambies números):\n"
+        f"- Partido: {p['visitante_nombre']} contra {p['local_nombre']} (en casa del segundo).\n"
+        f"- El modelo ve favorito a {p['favorito_nombre']} con un {p['prob_favorito']}% "
+        f"de probabilidad, por un margen de ~{p['margen_esperado']} puntos.\n"
+        "Engancha por el contexto (rivalidad, estrellas, lo que está en juego). No "
+        "desveles nada (el partido aún no se ha jugado) ni hables de apuestas."
+    )
+    # texto de respaldo por si el LLM falla o devuelve vacío.
+    respaldo = (f"El modelo ve a {p['favorito_nombre']} como favorito "
+                f"({p['prob_favorito']}%), por un margen de ~{p['margen_esperado']} puntos.")
+    try:
+        texto = llm.completar_texto(system, user, temperature=0.7, max_tokens=3500).strip()
+    except Exception as e:  # noqa: BLE001
+        print(f"[redaccion] previa de predicción falló ({e}); uso texto básico.")
+        texto = ""
+    return texto or respaldo   # si sale vacío, uso el respaldo
+
+
+def prediccion_manana(paquete: PaqueteJornada) -> Optional[dict]:
+    """Predice el 'partido a seguir' de la jornada siguiente con el modelo de ML.
+
+    Coge el calendario del día después, predice cada partido usando SOLO la temporada
+    hasta esa fecha (sin mirar al futuro), elige el más igualado y el LLM le pone previa.
+    """
+    from datetime import datetime, timedelta
+    from . import prediccion as ml
+
+    manana = (datetime.strptime(paquete.fecha, "%Y-%m-%d")
+              + timedelta(days=1)).strftime("%Y-%m-%d")
+    try:
+        from nba_api.stats.endpoints import scoreboardv3
+        games = scoreboardv3.ScoreboardV3(
+            game_date=manana, league_id="00", timeout=30
+        ).get_dict()["scoreboard"]["games"]
+    except Exception as e:  # noqa: BLE001
+        print(f"[redaccion] no pude leer el calendario de mañana ({e}).")
+        return None
+    if not games:
+        return None
+
+    season = _season_desde_fecha(paquete.fecha)
+    try:
+        stats = ml._stats_actuales(season, hasta=manana)
+    except Exception as e:  # noqa: BLE001
+        print(f"[redaccion] sin stats para la predicción ({e}).")
+        return None
+
+    preds = []
+    for g in games:
+        loc, vis = g["homeTeam"]["teamTricode"], g["awayTeam"]["teamTricode"]
+        try:
+            p = ml.predecir(loc, vis, season=season, fecha=manana, stats=stats)
+        except Exception:  # noqa: BLE001
+            p = None
+        if not p:
+            continue
+        p["local_nombre"] = f"{g['homeTeam']['teamCity']} {g['homeTeam']['teamName']}".strip()
+        p["visitante_nombre"] = f"{g['awayTeam']['teamCity']} {g['awayTeam']['teamName']}".strip()
+        preds.append(p)
+    if not preds:
+        return None
+
+    elegido = min(preds, key=lambda p: abs(p["prob_favorito"] - 50))   # el más igualado
+    elegido["favorito_nombre"] = (
+        elegido["local_nombre"] if elegido["favorito"] == elegido["local"]
+        else elegido["visitante_nombre"])
+    elegido["fecha"] = manana
+    elegido["texto"] = redactar_prediccion(elegido)
+    return elegido
+
+
+# ---------------------------------------------------------------------------
 # candado: trivia NBA general (sin spoiler de la jornada), pool estático
 # ---------------------------------------------------------------------------
 
@@ -499,6 +581,11 @@ def redactar(historias: list[Evento], paquete: PaqueteJornada,
     # sin spoilers: destacados + recomendación (deterministas, sin filtrar nada).
     contenido["highlights"] = highlights_jornada(historias)
     contenido["recomendacion"] = recomendacion_partido(paquete)
+
+    # predicción de mañana con el modelo de ML (el LLM solo narra la cifra).
+    print("[redaccion] Prediciendo el partido a seguir de mañana...")
+    contenido["prediccion"] = prediccion_manana(paquete)
+    _pausa()
 
     # quiz de una pregunta curiosa + trivia del candado.
     contenido["quiz"] = quiz_una_pregunta(paquete, historias)

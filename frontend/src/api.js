@@ -28,9 +28,10 @@ function _moldear(c, spoilers) {
     resultados: spoilers ? (c.resultados ?? null) : null,
     quiz: spoilers ? (c.quiz ?? null) : null,
     contrafactual: spoilers ? (c.contrafactual ?? null) : null,
-    // solo sin spoilers:
+    // solo sin spoilers (la predicción de mañana es naturalmente sin spoiler):
     highlights: spoilers ? null : (c.highlights ?? []),
     recomendacion: spoilers ? null : (c.recomendacion ?? null),
+    prediccion: spoilers ? null : (c.prediccion ?? null),
     gate: spoilers ? null : (c.gate ?? null),
   };
 }
