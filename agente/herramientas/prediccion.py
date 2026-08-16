@@ -155,13 +155,19 @@ def entrenar(seasons: Optional[list[str]] = None) -> dict:
 # predicción
 # ---------------------------------------------------------------------------
 
-def _stats_actuales(season: str) -> dict:
-    """Rasgos actuales de cada equipo (abbr -> dict) con TODOS sus partidos."""
+def _stats_actuales(season: str, hasta: Optional[str] = None) -> dict:
+    """Rasgos de cada equipo (abbr -> dict) con los partidos jugados HASTA `hasta`.
+
+    `hasta` (fecha AAAA-MM-DD) hace que solo cuenten los partidos anteriores a esa
+    fecha: así la predicción usa la temporada tal y como va en ese momento, sin
+    mirar al futuro. Si es None, usa todos los partidos de la temporada."""
     import pandas as pd
 
     df = pd.DataFrame(_filas_temporada(season))
     df = df[["TEAM_ID", "TEAM_ABBREVIATION", "GAME_DATE", "WL", "PLUS_MINUS"]].dropna()
     df["GAME_DATE"] = pd.to_datetime(df["GAME_DATE"])
+    if hasta is not None:
+        df = df[df["GAME_DATE"] < pd.to_datetime(hasta)]
     df = df.sort_values("GAME_DATE")
     out: dict[str, dict] = {}
     for abbr, g in df.groupby("TEAM_ABBREVIATION"):
@@ -177,20 +183,29 @@ def _stats_actuales(season: str) -> dict:
 
 
 def predecir(local: str, visitante: str, season: str = "2025-26",
-             stats: Optional[dict] = None) -> Optional[dict]:
-    """Predice un cruce: favorito, probabilidad del local y margen esperado."""
+             fecha: Optional[str] = None, stats: Optional[dict] = None) -> Optional[dict]:
+    """Predice un cruce: favorito, probabilidad del local y margen esperado.
+
+    `fecha` (AAAA-MM-DD): la del partido; hace que las estadísticas usen solo la
+    temporada hasta ese día (ver `_stats_actuales`) y calcula el descanso real."""
     import joblib
+    import pandas as pd
 
     if not _RUTA_MODELO.exists():
         raise RuntimeError("no hay modelo entrenado; corre entrenar() primero")
     modelo = joblib.load(_RUTA_MODELO)
-    stats = stats or _stats_actuales(season)
+    stats = stats or _stats_actuales(season, hasta=fecha)
     h, a = stats.get(local), stats.get(visitante)
     if not h or not a:
         return None
 
+    def _descanso(t):
+        if fecha and t.get("ult_fecha") is not None:
+            return min((pd.to_datetime(fecha) - t["ult_fecha"]).days, 5)
+        return 3
+
     x = [[h["net"] - a["net"], h["net10"] - a["net10"],
-          h["wpct"] - a["wpct"], 0]]   # descanso neutro para un cruce hipotético
+          h["wpct"] - a["wpct"], _descanso(h) - _descanso(a)]]
     prob_local = float(modelo["clf"].predict_proba(x)[0][1])
     margen = float(modelo["reg"].predict(x)[0])
     favorito = local if prob_local >= 0.5 else visitante
