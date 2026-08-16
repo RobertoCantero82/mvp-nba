@@ -5,6 +5,7 @@ import Quiz from "./components/Quiz";
 import Cronica from "./components/Cronica";
 import SinSpoilers from "./components/SinSpoilers";
 import Contrafactual from "./components/Contrafactual";
+import Logo from "./components/Logo";
 
 const _MESES = ["ene", "feb", "mar", "abr", "may", "jun",
   "jul", "ago", "sep", "oct", "nov", "dic"];
@@ -47,7 +48,8 @@ export default function App() {
       <div className="orb a" /><div className="orb b" /><div className="orb c" />
 
       <header className="nav"><div className="wrap">
-        <div className="brand">Agente M.V.P.{fecha ? <span>{fechaBonita(fecha)}</span> : null}</div>
+        {/* marca: el logo (la fecha ya sale en el desplegable) */}
+        <Logo />
         <div className="controls">
           {jornadas.length > 1 && (
             <select value={fecha ?? ""} onChange={(e) => setFecha(e.target.value)}>
