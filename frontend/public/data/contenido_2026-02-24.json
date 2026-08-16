@@ -1,0 +1,193 @@
+{
+  "fecha": "2026-02-24",
+  "portada": {
+    "tipo": "racha_pts",
+    "jugador": "J. Embiid",
+    "equipo": "PHI",
+    "numero": "23",
+    "unidad": "partidos seguidos de 20+ puntos",
+    "contexto": "",
+    "titular": "J. Embiid (PHI) encadena 23 partidos seguidos anotando 20+ puntos"
+  },
+  "resultados": [
+    {
+      "game_id": "0022500831",
+      "visitante": "PHI",
+      "visitante_nombre": "Philadelphia 76ers",
+      "pts_visitante": 135,
+      "local": "IND",
+      "local_nombre": "Indiana Pacers",
+      "pts_local": 114,
+      "ganador": "PHI",
+      "estado": "Final",
+      "analisis": "Filadelfia no necesita magia, solo dos cintas transportadoras: Embiid sigue imparable en su racha de 23 encuentros por encima de los 20 puntos, mientras Maxey, tras sumar 32 (con un 10/10 perfecto en línea), alarga su propia secuencia a 8 partidos consecutivos."
+    },
+    {
+      "game_id": "0022500832",
+      "visitante": "WAS",
+      "visitante_nombre": "Washington Wizards",
+      "pts_visitante": 98,
+      "local": "ATL",
+      "local_nombre": "Atlanta Hawks",
+      "pts_local": 119,
+      "ganador": "ATL",
+      "estado": "Final",
+      "analisis": "Kuminga convierte el aro rival en un ejercicio de eficiencia pura con 27 puntos y un 89,5% de tiro real, mientras Okongwu asegura la base con un doble-doble de 10 puntos y 10 rebotes que da a Atlanta la solidez que Washington no pudo perforar."
+    },
+    {
+      "game_id": "0022500833",
+      "visitante": "DAL",
+      "visitante_nombre": "Dallas Mavericks",
+      "pts_visitante": 123,
+      "local": "BKN",
+      "local_nombre": "Brooklyn Nets",
+      "pts_local": 114,
+      "ganador": "DAL",
+      "estado": "Final",
+      "analisis": "Aunque Porter Jr. de los Nets brilla con 26 puntos y un 69,7% de tiro real, Dallas responde con el cerebro en la cancha: B. Williams reparte 10 asistencias y suma 19 puntos para dirigir el juego con la precisión de un director de orquesta."
+    },
+    {
+      "game_id": "0022500834",
+      "visitante": "OKC",
+      "visitante_nombre": "Oklahoma City Thunder",
+      "pts_visitante": 116,
+      "local": "TOR",
+      "local_nombre": "Toronto Raptors",
+      "pts_local": 107,
+      "ganador": "OKC",
+      "estado": "Final",
+      "analisis": "Oklahoma City arma un duelo de precisión: C. Wallace firma 27 puntos con un 80,0% de tiro real, mientras I. Joe se convierte en el mejor triplista de la jornada, conectando 6 triples de 11 intentos para estirar la cancha como si fuera de goma."
+    },
+    {
+      "game_id": "0022500835",
+      "visitante": "NYK",
+      "visitante_nombre": "New York Knicks",
+      "pts_visitante": 94,
+      "local": "CLE",
+      "local_nombre": "Cleveland Cavaliers",
+      "pts_local": 109,
+      "ganador": "CLE",
+      "estado": "Final",
+      "analisis": "Cleveland gana la guerra en los tableros: J. Allen cierra con 19 puntos y 10 rebotes, pero es M. Robinson de los Knicks quien roba protagonismo en la pintura con 11 puntos y 16 placas, un duelo de interiores que se decidió al margen."
+    },
+    {
+      "game_id": "0022500836",
+      "visitante": "CHA",
+      "visitante_nombre": "Charlotte Hornets",
+      "pts_visitante": 131,
+      "local": "CHI",
+      "local_nombre": "Chicago Bulls",
+      "pts_local": 99,
+      "ganador": "CHA",
+      "estado": "Final",
+      "analisis": "Charlotte no solo gana por 32 puntos, sino que deja a Chicago con la sensación de haber jugado contra un murallón: Buzelis responde con 32 puntos, 6 triples de 11 y un 84,2% de tiro real que convierte el partido en un ejercicio de matemáticas frías."
+    },
+    {
+      "game_id": "0022500837",
+      "visitante": "MIA",
+      "visitante_nombre": "Miami Heat",
+      "pts_visitante": 117,
+      "local": "MIL",
+      "local_nombre": "Milwaukee Bucks",
+      "pts_local": 128,
+      "ganador": "MIL",
+      "estado": "Final",
+      "analisis": "Milwaukee se lleva el duelo de anotadores con K. Porter Jr., quien supera a N. Powell (26) con 32 puntos propios, 8 de 8 en línea y un 68,0% de tiro real que demuestra que a veces lo simple y perfecto vence a lo complicado."
+    },
+    {
+      "game_id": "0022500838",
+      "visitante": "GSW",
+      "visitante_nombre": "Golden State Warriors",
+      "pts_visitante": 109,
+      "local": "NOP",
+      "local_nombre": "New Orleans Pelicans",
+      "pts_local": 113,
+      "ganador": "NOP",
+      "estado": "Final",
+      "analisis": "Golden State despliega un par de dobles-dobletes (Santos con 15 puntos y 12 rebotes, Podziemski con 16 y 15) que casi bastan, pero el duelo entre D. Melton (28) y Z. Williamson (26) decide los 4 puntos de margen en Nueva Orleans."
+    },
+    {
+      "game_id": "0022500839",
+      "visitante": "BOS",
+      "visitante_nombre": "Boston Celtics",
+      "pts_visitante": 97,
+      "local": "PHX",
+      "local_nombre": "Phoenix Suns",
+      "pts_local": 81,
+      "ganador": "BOS",
+      "estado": "Final",
+      "analisis": "Boston controla la pintura con un dúo inesperado: Scheierman y Queta firman dobles-dobletes (11 puntos y 11 rebotes el primero, 14 y 13 el segundo) que ahogan a Phoenix antes de que el partido cobre verdadera velocidad."
+    },
+    {
+      "game_id": "0022500841",
+      "visitante": "MIN",
+      "visitante_nombre": "Minnesota Timberwolves",
+      "pts_visitante": 124,
+      "local": "POR",
+      "local_nombre": "Portland Trail Blazers",
+      "pts_local": 121,
+      "ganador": "MIN",
+      "estado": "Final",
+      "analisis": "Minnesota vence por 3 en un partido de cerrojos: A. Edwards lidera con 34 puntos, J. McDaniels aporta 29 con un 88,2% de tiro real y R. Gobert limpia la cancha con 19 rebotes, el mejor de la jornada, para cerrar una defensa que no perdonó errores."
+    },
+    {
+      "game_id": "0022500840",
+      "visitante": "ORL",
+      "visitante_nombre": "Orlando Magic",
+      "pts_visitante": 110,
+      "local": "LAL",
+      "local_nombre": "Los Angeles Lakers",
+      "pts_local": 109,
+      "ganador": "ORL",
+      "estado": "Final",
+      "analisis": "Orlando se lleva el partido por un solo punto gracias a P. Banchero, máximo anotador con 36 puntos, mientras L. Dončić se queda a un rebote del triple-doble (22 puntos, 9 rebotes y 15 asistencias, la mayor cifra de la jornada) en un duelo que se decidió en el último suspiro."
+    }
+  ],
+  "highlights": [
+    "Una racha anotadora que sigue viva noche tras noche.",
+    "Cayó una exhibición anotadora de las gordas.",
+    "Una clase de puntería de las que no se ven a menudo."
+  ],
+  "recomendacion": {
+    "partido": "Orlando Magic @ Los Angeles Lakers",
+    "abbr": "ORL @ LAL",
+    "texto": "Dos equipos con ganas y un duelo que apetece de principio a fin: de esos que se disfrutan más sin saber nada. Dale al play antes de que te lo cuenten."
+  },
+  "quiz": {
+    "pregunta": "¿Que jugador logro anotar 32 puntos en un partido en esta jornada?",
+    "opciones": [
+      "T. Maxey",
+      "J. Kuminga",
+      "W. Riley",
+      "M. Porter Jr."
+    ],
+    "correcta": "T. Maxey",
+    "correcta_idx": 0,
+    "explicacion": "T. Maxey (PHI) anota 32 puntos (10/22 TC, 2/8 T3, 10/10 TL)"
+  },
+  "gate": {
+    "pregunta": "¿Quién es el máximo anotador de la historia de la NBA?",
+    "opciones": [
+      "Kareem Abdul-Jabbar",
+      "Karl Malone",
+      "LeBron James",
+      "Michael Jordan"
+    ],
+    "correcta_idx": 2,
+    "explicacion": "LeBron James superó a Kareem en 2023."
+  },
+  "contrafactual": {
+    "jugador": "M. Buzelis",
+    "equipo": "CHI",
+    "pts_noche": 32,
+    "media": 16.3,
+    "sigma": 6.8,
+    "z": 2.31,
+    "rango_esperado": [
+      9,
+      23
+    ],
+    "game_id": "0022500836",
+    "texto": "Esta noche, M. Buzelis (CHI) anotó 32 puntos, una salida de ruta que se sitúa a 2,31 desviaciones típicas de su media de 16,3. Pero, ¿qué hubiera pasado si se hubiera quedado dentro del rango esperable de 9 a 23 puntos? La lectura del partido habría mutado de un fenómeno estadístico a un ejercicio de rotaciones y posesión gestionada. En lugar de analizar cómo un jugador se escapa de los márgenes, los"
+  }
+}

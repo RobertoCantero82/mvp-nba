@@ -70,7 +70,12 @@ def portada_desde_evento(evento: Evento) -> dict:
     el numero grande, su unidad y el contexto. Datos puros; el LLM no interviene."""
     d = evento.datos
     numero, unidad, contexto = "", _PORTADA_UNIDAD.get(evento.tipo, ""), ""
-    if "umbral" in d:  # hitos de carrera (puntos, triples, ...)
+    if evento.tipo.startswith("racha_"):  # las rachas también llevan 'umbral'; van primero
+        numero = str(d.get("longitud", ""))
+        u = {"pts": "puntos", "fg3m": "triples", "ast": "asistencias",
+             "reb": "rebotes"}.get(d.get("stat"), "")
+        unidad = f"partidos seguidos de {d.get('umbral')}+ {u}".strip()
+    elif "umbral" in d:  # hitos de carrera (puntos, triples, ...)
         numero = f"{d['umbral']:,}".replace(",", ".")
         if d.get("rank_historico_aprox"):
             contexto = f"Nº {d['rank_historico_aprox']} de la historia"
@@ -78,9 +83,6 @@ def portada_desde_evento(evento: Evento) -> dict:
         numero = str(d.get("pts", ""))
     elif evento.tipo == "festival_triples":
         numero = str(d.get("fg3m", ""))
-    elif evento.tipo.startswith("racha_"):
-        numero = str(d.get("longitud", ""))
-        unidad = "partidos seguidos"
     return {
         "tipo": evento.tipo, "jugador": evento.jugador, "equipo": evento.equipo_abbr,
         "numero": numero, "unidad": unidad, "contexto": contexto,
