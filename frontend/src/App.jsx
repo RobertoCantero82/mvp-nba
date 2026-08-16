@@ -86,7 +86,7 @@ export default function App() {
       )}
 
       <footer>
-        Agente M.V.P. — Métricas · Verificación · Publicación&nbsp;&nbsp;|&nbsp;&nbsp;
+        Agente M.V.P. — Modelo · Veredicto · Predicción&nbsp;&nbsp;|&nbsp;&nbsp;
         redacción asistida a través de LLM y datos verificados&nbsp;&nbsp;|&nbsp;&nbsp;
         Roberto Cantero
       </footer>
