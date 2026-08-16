@@ -1,62 +1,63 @@
-import { colorEquipo } from "../teams";
+import { useEffect, useState } from "react";
 
-// etiqueta corta (eyebrow) segun el tipo de hito de portada.
-const LABEL = {
-  hito_pts_carrera: "Hito histórico",
-  hito_fg3m_carrera: "Hito histórico",
-  hito_ast_carrera: "Hito histórico",
-  hito_reb_carrera: "Hito histórico",
-  anotacion_alta: "Exhibición anotadora",
-  festival_triples: "Lluvia de triples",
-  racha_pts: "Racha viva",
-  racha_fg3m: "Racha viva",
-};
-
-// titular sin spoilers: describe el TIPO de gesta, sin desvelar quién ni cuánto.
+// teaser sin spoilers: describe el TIPO de gesta, sin nombre ni cifra.
 const TEASER = {
-  hito_pts_carrera: "Un veterano entró en un club que muy pocos han pisado",
-  hito_fg3m_carrera: "Un tirador alcanzó una marca histórica de triples",
-  hito_ast_carrera: "Un base se metió en la élite histórica de asistencias",
-  hito_reb_carrera: "Un grande llegó a una cifra de rebotes de leyenda",
-  anotacion_alta: "Alguien firmó una exhibición anotadora de las gordas",
-  festival_triples: "Un jugador se puso a llover triples sin descanso",
-  racha_pts: "Una racha anotadora que no se apaga",
-  racha_fg3m: "Un francotirador encadena noche tras noche",
+  hito_pts_carrera: "Un veterano entra en un club de leyenda.",
+  hito_fg3m_carrera: "Un tirador alcanza una marca histórica de triples.",
+  hito_ast_carrera: "Un base entra en la élite histórica de asistencias.",
+  hito_reb_carrera: "Un grande llega a una cifra de rebotes de leyenda.",
+  anotacion_alta: "Alguien firma una exhibición anotadora de las gordas.",
+  festival_triples: "Un jugador se pone a llover triples sin descanso.",
+  racha_pts: "Una racha anotadora que no se apaga.",
+  racha_fg3m: "Un francotirador que no falla noche tras noche.",
 };
 
-export default function Hero({ portada, fecha }) {
-  if (!portada) return null;
-  const label = LABEL[portada.tipo] || "La noche";
+// número que cuenta hacia arriba al montar (respeta reduce-motion).
+function useCountUp(target) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!target) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setVal(target); return; }
+    let raf, hecho = false;
+    const t0 = performance.now(), dur = 1300, ease = (t) => 1 - Math.pow(1 - t, 3);
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      setVal(Math.round(target * ease(p)));
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else hecho = true;
+    };
+    raf = requestAnimationFrame(tick);
+    // salvavidas: si el rAF está pausado (pestaña oculta), aseguro el valor final.
+    const fin = setTimeout(() => { if (!hecho) setVal(target); }, dur + 500);
+    return () => { cancelAnimationFrame(raf); clearTimeout(fin); };
+  }, [target]);
+  return val;
+}
 
-  // version sin spoilers: nada de nombre, equipo ni cifra.
-  if (portada.safe) {
-    return (
-      <section className="hero" style={{ "--team": "var(--flame)" }}>
-        <div className="hero-in">
-          <span className="eyebrow">{label} · {fecha}</span>
-          <h1 className="hero-titular">{TEASER[portada.tipo] || "La gesta de la noche"}</h1>
-          <p className="hero-sub">
-            Activa <b>«Con resultados»</b> para descubrir quién, cuánto y contra quién.
-          </p>
-        </div>
-      </section>
-    );
-  }
-
-  const color = colorEquipo(portada.equipo);
+function HeroTeaser({ portada }) {
   return (
-    <section className="hero" style={{ "--team": color }}>
-      <div className="hero-in">
-        <div className="hero-kicker">
-          <span className="eyebrow">{label} · {fecha}</span>
-          {portada.equipo && <span className="team-chip">{portada.equipo}</span>}
-        </div>
-        {portada.numero && <div className="bignum">{portada.numero}</div>}
-        {portada.jugador && <h1 className="hero-name">{portada.jugador}</h1>}
-        {portada.unidad && <div className="hero-unit">{portada.unidad}</div>}
-        {portada.contexto && <span className="rank">{portada.contexto}</span>}
-        <p className="hero-sub">{portada.titular}</p>
-      </div>
-    </section>
+    <section className="hero"><div className="wrap anim">
+      <h1>{TEASER[portada.tipo] || "La gesta de la noche."}</h1>
+      <p className="lead">Toca «Resultados» (o supera el reto del final) para descubrir quién, cuánto y contra quién.</p>
+    </div></section>
   );
+}
+
+function HeroFull({ portada }) {
+  const target = parseInt(String(portada.numero).replace(/\D/g, ""), 10) || 0;
+  const val = useCountUp(target);
+  return (
+    <section className="hero"><div className="wrap anim">
+      {portada.equipo && <div className="kick"><span className="dot" /> {portada.equipo}</div>}
+      {target > 0 && <div className="bignum">{val.toLocaleString("es-ES")}</div>}
+      {portada.unidad && <div className="unit">{portada.unidad}{portada.contexto ? ` · ${portada.contexto}` : ""}</div>}
+      {portada.jugador && <h1>{portada.jugador}.</h1>}
+      {portada.titular && <p className="lead">{portada.titular}.</p>}
+    </div></section>
+  );
+}
+
+export default function Hero({ portada }) {
+  if (!portada) return null;
+  return portada.safe ? <HeroTeaser portada={portada} /> : <HeroFull portada={portada} />;
 }

@@ -25,6 +25,7 @@ tokens/minuto, por eso las piezas se generan espaciadas (`_PAUSA_TPM`).
 from __future__ import annotations
 
 import json
+import re
 import statistics
 import time
 from datetime import datetime
@@ -315,6 +316,148 @@ def redactar_contrafactual(cf: dict) -> str:
 
 
 # ---------------------------------------------------------------------------
+# crónica partido a partido (con resultados)
+# ---------------------------------------------------------------------------
+
+def analisis_por_partido(paquete: PaqueteJornada, historias: list[Evento]) -> dict:
+    """El LLM escribe una línea de análisis por partido (dos si hay mucho que
+    contar), usando SOLO el marcador y los hitos ya detectados. -> {game_id: texto}."""
+    ev_por_juego: dict[str, list[str]] = {}
+    for e in historias:
+        if e.game_id:
+            ev_por_juego.setdefault(e.game_id, []).append(e.titular)
+
+    lineas = []
+    for i, p in enumerate(paquete.partidos):
+        marcador = (f"{p.equipo_visitante_abbr} {p.puntos_visitante}-"
+                    f"{p.puntos_local} {p.equipo_local_abbr}")
+        evs = "; ".join(ev_por_juego.get(p.game_id, [])[:4]) or "sin hitos reseñables"
+        lineas.append(f"{i}. {marcador} (gana {p.ganador_abbr or 'nadie'}). Datos: {evs}")
+
+    system = VOZ_EDITORIAL + "\n" + GUARDARRAILES + _BREVE
+    user = (
+        f"Jornada del {paquete.fecha}. Para CADA partido escribe UNA línea de "
+        "análisis (dos como mucho si hay mucho que contar), con tu voz, usando SOLO "
+        "el marcador y los hitos dados (puedes hablar del margen). No inventes nada.\n\n"
+        + "\n".join(lineas) +
+        "\n\nDevuelve UNA línea por partido con el formato exacto `índice| análisis` "
+        "(el número, una barra vertical y el texto). Ejemplo:\n"
+        "0| Charlotte rompe el partido en el tercer cuarto.\n"
+        "Una línea por cada índice de arriba, y nada más."
+    )
+    # texto plano con delimitador (mas robusto que JSON para 10 textos largos).
+    try:
+        texto = llm.completar_texto(system, user, temperature=0.6, max_tokens=6000)
+    except Exception as e:  # noqa: BLE001
+        print(f"[redaccion] análisis por partido falló ({e}); dejo líneas vacías.")
+        texto = ""
+    por_indice: dict[int, str] = {}
+    for ln in texto.splitlines():
+        m = re.match(r"^\s*(\d+)\s*\|\s*(.+)", ln)
+        if m:
+            por_indice[int(m.group(1))] = m.group(2).strip()
+    return {p.game_id: por_indice.get(i, "") for i, p in enumerate(paquete.partidos)}
+
+
+# ---------------------------------------------------------------------------
+# destacados y recomendación (versión sin spoilers, deterministas)
+# ---------------------------------------------------------------------------
+
+# frase de destacado por tipo de evento, SIN desvelar quién ni cuánto.
+_HIGHLIGHT = {
+    "hito_pts_carrera": "Un veterano entró en un club de anotación que muy pocos han pisado.",
+    "hito_fg3m_carrera": "Un tirador alcanzó una cifra histórica de triples de carrera.",
+    "hito_ast_carrera": "Un base se metió en la élite histórica de asistencias.",
+    "hito_reb_carrera": "Un grande llegó a una marca de rebotes de leyenda.",
+    "cuadruple_doble": "Alguien firmó un cuádruple-doble, una rareza absoluta.",
+    "triple_doble": "Hubo un triple-doble sobre la mesa.",
+    "anotacion_alta": "Cayó una exhibición anotadora de las gordas.",
+    "festival_triples": "Un jugador se puso a llover triples sin descanso.",
+    "racha_pts": "Una racha anotadora que sigue viva noche tras noche.",
+    "racha_fg3m": "Un francotirador encadena buenas noches desde el arco.",
+    "eficiencia_elite": "Una clase de puntería de las que no se ven a menudo.",
+}
+
+
+def highlights_jornada(historias: list[Evento], n: int = 3) -> list[str]:
+    """Lo más destacado en clave sin-spoilers: describo el TIPO de gesta, sin
+    nombres ni marcadores. Determinista, sin riesgo de filtrar resultados."""
+    vistos: set[str] = set()
+    out: list[str] = []
+    for e in historias:
+        frase = _HIGHLIGHT.get(e.tipo)
+        if frase and e.tipo not in vistos:
+            vistos.add(e.tipo)
+            out.append(frase)
+        if len(out) >= n:
+            break
+    return out
+
+
+# ganchos genéricos para la recomendación: enganchan por contexto, NUNCA por el
+# desenlace (nada de "último minuto", "remontada", "paliza", "prórroga").
+_GANCHOS_RECO = [
+    "Dos equipos con ganas y un duelo que apetece de principio a fin: de esos que "
+    "se disfrutan más sin saber nada. Dale al play antes de que te lo cuenten.",
+    "Talento por todas partes y cuentas pendientes sobre la pista. El tipo de "
+    "partido que se ve mejor a ciegas. No preguntes el resultado, solo míralo.",
+    "Ritmo, estrellas y morbo asegurado. De esos que da rabia que te destripen. "
+    "Ponlo, siéntate y déjate llevar.",
+]
+
+
+def recomendacion_partido(paquete: PaqueteJornada) -> Optional[dict]:
+    """Elijo un partido para recomendar (el de menor margen, suele ser el más
+    vivo) y le pongo un gancho que NO revela el desenlace."""
+    finalizados = [p for p in paquete.partidos if p.puntos_local is not None
+                   and p.puntos_visitante is not None]
+    if not finalizados:
+        return None
+    p = min(finalizados, key=lambda x: abs(x.puntos_local - x.puntos_visitante))
+    idx = sum(ord(c) for c in paquete.fecha) % len(_GANCHOS_RECO)
+    return {
+        "partido": f"{p.equipo_visitante_nombre} @ {p.equipo_local_nombre}",
+        "abbr": f"{p.equipo_visitante_abbr} @ {p.equipo_local_abbr}",
+        "texto": _GANCHOS_RECO[idx],
+    }
+
+
+# ---------------------------------------------------------------------------
+# candado: trivia NBA general (sin spoiler de la jornada), pool estático
+# ---------------------------------------------------------------------------
+
+_GATE_TRIVIA = [
+    {"pregunta": "¿Quién tiene el récord de puntos en un solo partido de la NBA?",
+     "opciones": ["Kobe Bryant", "Wilt Chamberlain", "Michael Jordan", "LeBron James"],
+     "correcta_idx": 1, "explicacion": "Wilt Chamberlain, 100 puntos en 1962."},
+    {"pregunta": "¿Qué dos franquicias comparten el récord de títulos de la NBA?",
+     "opciones": ["Lakers y Celtics", "Bulls y Warriors", "Spurs y Heat", "Knicks y Pistons"],
+     "correcta_idx": 0, "explicacion": "Lakers y Celtics, empatados en lo más alto."},
+    {"pregunta": "¿Quién es el máximo anotador de la historia de la NBA?",
+     "opciones": ["Kareem Abdul-Jabbar", "Karl Malone", "LeBron James", "Michael Jordan"],
+     "correcta_idx": 2, "explicacion": "LeBron James superó a Kareem en 2023."},
+    {"pregunta": "¿Cada cuántos años se celebra el All-Star de la NBA?",
+     "opciones": ["Cada dos años", "Cada temporada", "Cada cuatro años", "No hay All-Star"],
+     "correcta_idx": 1, "explicacion": "Se juega una vez por temporada."},
+    {"pregunta": "¿Cuánto vale un tiro desde más allá de la línea de tres?",
+     "opciones": ["2 puntos", "3 puntos", "4 puntos", "1 punto"],
+     "correcta_idx": 1, "explicacion": "Tres puntos; de ahí el nombre."},
+]
+
+
+def gate_para_jornada(fecha: str) -> dict:
+    """Elijo una pregunta de trivia (rotando por fecha) para el candado."""
+    idx = sum(ord(c) for c in fecha) % len(_GATE_TRIVIA)
+    return _GATE_TRIVIA[idx]
+
+
+def quiz_una_pregunta(paquete: PaqueteJornada, historias: list[Evento]) -> Optional[dict]:
+    """La pregunta curiosa de la noche (una sola), construida de forma determinista."""
+    qs = construir_quiz(paquete, historias, n_preguntas=1)
+    return qs[0] if qs else None
+
+
+# ---------------------------------------------------------------------------
 # orquestador
 # ---------------------------------------------------------------------------
 
@@ -335,30 +478,31 @@ def redactar(historias: list[Evento], paquete: PaqueteJornada,
     season = _season_desde_fecha(paquete.fecha)
     contenido: dict = {"fecha": paquete.fecha}
 
-    # incluyo los marcadores de la jornada (datos puros; el backend los sirve solo con-resultados).
-    contenido["resultados"] = resultados_jornada(paquete)
-
-    # portada: la historia principal (la primera priorizada) para el hero.
-    contenido["portada"] = portada_desde_evento(historias[0]) if historias else None
-
     def _pausa():
         if pausas:
             time.sleep(_PAUSA_TPM)
 
-    # pieza 1: quiz (opciones deterministas + intro del LLM)
-    print("[redaccion] Construyendo quiz (opciones deterministas)...")
-    quiz = construir_quiz(paquete, historias)
-    print("[redaccion] Escribiendo intro del quiz...")
-    intro = redactar_intro_quiz(quiz)
-    contenido["quiz"] = {"intro": intro, "preguntas": quiz}
+    # portada: la historia principal (para el hero).
+    contenido["portada"] = portada_desde_evento(historias[0]) if historias else None
+
+    # crónica partido a partido: marcadores + una línea de análisis por partido (LLM).
+    print("[redaccion] Escribiendo la crónica partido a partido...")
+    analisis = analisis_por_partido(paquete, historias)
+    resultados = resultados_jornada(paquete)
+    for r in resultados:
+        r["analisis"] = analisis.get(r["game_id"], "")
+    contenido["resultados"] = resultados
     _pausa()
 
-    # pieza 2: analisis (doble version)
-    print("[redaccion] Escribiendo analisis (doble version)...")
-    contenido["analisis"] = redactar_analisis(historias, paquete)
-    _pausa()
+    # sin spoilers: destacados + recomendación (deterministas, sin filtrar nada).
+    contenido["highlights"] = highlights_jornada(historias)
+    contenido["recomendacion"] = recomendacion_partido(paquete)
 
-    # pieza 3: contrafactual (solo con_resultados; se omite en sin_spoilers)
+    # quiz de una pregunta curiosa + trivia del candado.
+    contenido["quiz"] = quiz_una_pregunta(paquete, historias)
+    contenido["gate"] = gate_para_jornada(paquete.fecha)
+
+    # contrafactual (solo con_resultados; Python calcula, el LLM narra).
     print("[redaccion] Calculando y escribiendo contrafactual...")
     cf = calcular_contrafactual(paquete, historias, season)
     if cf:
@@ -368,10 +512,4 @@ def redactar(historias: list[Evento], paquete: PaqueteJornada,
         contenido["contrafactual"] = None
         print("[redaccion]   (sin datos suficientes para el contrafactual)")
 
-    # pieza 4: respuestas del quiz (deterministas)
-    contenido["quiz_respuestas"] = [
-        {"pregunta": q["pregunta"], "correcta": q["correcta"],
-         "explicacion": q["explicacion"]}
-        for q in quiz
-    ]
     return contenido
