@@ -120,5 +120,4 @@ pronóstico analítico, sin cuotas. En modo sin-spoilers no se revela ningún re
 
 ---
 
-Proyecto de bootcamp de **Roberto Cantero** (The Bridge). Redacción asistida por LLM
-con cifras verificadas.
+Redacción asistida por LLM con cifras verificadas.
