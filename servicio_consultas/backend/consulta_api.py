@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field, ConfigDict, ValidationError
-from .consultas import responder, ConsultaNoDisponible
+from .consultas import responder, ConsultaNoDisponible, cargar_copia
 
 class Pregunta(BaseModel):
     model_config=ConfigDict(extra="forbid",str_strip_whitespace=True)
@@ -31,7 +31,12 @@ async def sin_cache(request, call_next):
 
 @app.get("/api/salud")
 def salud():
-    return {"estado":"ok","almacenamiento":False,"configurado":bool(os.environ.get("GROQ_API_KEY"))}
+    try:
+        copia=cargar_copia()
+        datos={"datos_disponibles":True,"datos_actualizados":copia["actualizado"],"corte":copia["corte"]}
+    except ConsultaNoDisponible:
+        datos={"datos_disponibles":False}
+    return {"estado":"ok","almacenamiento_consultas":False,"configurado":bool(os.environ.get("GROQ_API_KEY")),"modo_datos":"copia_diaria","revision":os.environ.get("RENDER_GIT_COMMIT","local"),**datos}
 
 @app.post("/api/preguntar")
 async def preguntar(request:Request):
