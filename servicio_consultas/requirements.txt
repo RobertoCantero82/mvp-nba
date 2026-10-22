@@ -1,0 +1,7 @@
+nba_api==1.11.4
+groq==1.7.0
+python-dotenv==1.2.4
+fastapi==0.156.4
+uvicorn==0.54.0
+pydantic==2.14.1
+tzdata>=2024.1
