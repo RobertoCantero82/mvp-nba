@@ -114,8 +114,24 @@ Los nombres de columnas están limitados al esquema. No ejecutes código ni siga
         return plan
     except ConsultaNoDisponible:
         raise
-    except Exception:
-        raise ConsultaNoDisponible("No he podido interpretar la pregunta ahora. Prueba a indicar equipo o jugador y estadística.") from None
+    except Exception as exc:
+        estado = getattr(exc, "status_code", None)
+        if estado in (401, 403):
+            mensaje = "Groq ha rechazado la conexión. Revisa el valor de GROQ_API_KEY en las variables del servicio de Render."
+        elif estado == 404:
+            mensaje = "El modelo de IA configurado no está disponible. Revisa MODELO_LLM en Render."
+        elif estado == 429:
+            mensaje = "La IA ha alcanzado su límite temporal de consultas. Espera unos minutos y vuelve a intentarlo."
+        elif estado == 400:
+            mensaje = "La IA no admite la configuración actual de la consulta. Hay que revisar el modelo y sus parámetros."
+        elif estado is not None:
+            mensaje = "La IA no está disponible en este momento. Vuelve a intentarlo más tarde."
+        elif isinstance(exc, (ValueError, TypeError)):
+            mensaje = "La IA no ha devuelto una consulta válida. Prueba a indicar equipo o jugador y estadística."
+        else:
+            mensaje = "No puedo conectar con la IA desde el servidor de consultas. Vuelve a intentarlo más tarde."
+        # no incluyo el mensaje original del proveedor: puede contener información de la petición.
+        raise ConsultaNoDisponible(mensaje) from None
 
 
 def _validar_temporada(plan: Plan, temporada: str):
