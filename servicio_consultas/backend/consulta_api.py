@@ -33,7 +33,7 @@ async def sin_cache(request, call_next):
 def salud():
     try:
         copia=cargar_copia()
-        datos={"datos_disponibles":True,"datos_actualizados":copia["actualizado"],"corte":copia["corte"]}
+        datos={"datos_disponibles":True,"partidos_disponibles":bool(copia.get("partidos",{}).get("jugadores") and copia.get("partidos",{}).get("equipos")),"datos_actualizados":copia["actualizado"],"corte":copia["corte"]}
     except ConsultaNoDisponible:
         datos={"datos_disponibles":False}
     return {"estado":"ok","almacenamiento_consultas":False,"configurado":bool(os.environ.get("GROQ_API_KEY")),"modo_datos":"copia_diaria","revision":os.environ.get("RENDER_GIT_COMMIT","local"),**datos}
